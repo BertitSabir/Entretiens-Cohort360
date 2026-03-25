@@ -27,10 +27,45 @@ class Medication(models.Model):
 
     code = models.CharField(max_length=64, unique=True)
     label = models.CharField(max_length=255)
-    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_ACTIF)
+    status = models.CharField(
+        max_length=16, choices=STATUS_CHOICES, default=STATUS_ACTIF
+    )
 
     class Meta:
         ordering = ["code"]
 
     def __str__(self) -> str:  # pragma: no cover - simple repr
         return f"{self.code} - {self.label} ({self.status})"
+
+
+class Prescription(models.Model):
+    """Représente une prescription médicale."""
+
+    STATUS_VALIDE = "valide"
+    STATUS_EN_ATTENTE = "en_attente"
+    STATUS_SUPPR = "suppr"
+    STATUS_CHOICES = [
+        (STATUS_VALIDE, "valide"),
+        (STATUS_EN_ATTENTE, "en_attente"),
+        (STATUS_SUPPR, "suppr"),
+    ]
+
+    patient = models.ForeignKey(
+        Patient, on_delete=models.PROTECT, related_name="prescriptions"
+    )
+    medication = models.ForeignKey(
+        Medication, on_delete=models.PROTECT, related_name="prescriptions"
+    )
+    status = models.CharField(
+        max_length=16, choices=STATUS_CHOICES, default=STATUS_EN_ATTENTE
+    )
+    start_date = models.DateField()
+    end_date = models.DateField()
+    comment = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:  # pragma: no cover - simple repr
+        return f"Prescription de {self.medication} pour {self.patient} ({self.status})"

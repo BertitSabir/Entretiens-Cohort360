@@ -18,7 +18,7 @@ skip_covered = false
 
 [tool.ruff]
 target-version = "py310"
-line-length = 120
+line-length = 88
 exclude = [
     "*/migrations/*",
     "manage.py",
@@ -37,7 +37,7 @@ select = [
     "DJ",  # flake8-django
 ]
 ignore = [
-    "B008",  # do not perform function calls in default arguments (DRF does it)
+    "B008",  # do not perform function calls in default arguments (DRF does)
 ]
 
 [tool.ruff.lint.isort]
