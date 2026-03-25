@@ -39,6 +39,7 @@ class MedicationFilter(django_filters.FilterSet):
 class PrescriptionFilter(django_filters.FilterSet):
     patient = django_filters.NumberFilter(field_name="patient__id")
     medicament = django_filters.NumberFilter(field_name="medication__id")
+    status = django_filters.CharFilter(field_name="status", lookup_expr="exact")
 
     date_debut = django_filters.DateFilter(field_name="start_date", lookup_expr="exact")
     date_debut__apres = django_filters.DateFilter(

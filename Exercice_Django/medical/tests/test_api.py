@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from medical.models import Patient, Medication
+from medical.models import Medication, Patient
 
 
 class ApiListTests(TestCase):
@@ -10,13 +10,21 @@ class ApiListTests(TestCase):
         self.client = APIClient()
 
         # Patients
-        Patient.objects.create(last_name="Martin", first_name="Jeanne", birth_date="1992-03-10")
-        Patient.objects.create(last_name="Durand", first_name="Jean", birth_date="1980-05-20")
+        Patient.objects.create(
+            last_name="Martin", first_name="Jeanne", birth_date="1992-03-10"
+        )
+        Patient.objects.create(
+            last_name="Durand", first_name="Jean", birth_date="1980-05-20"
+        )
         Patient.objects.create(last_name="Bernard", first_name="Paul")
 
         # Medications
-        Medication.objects.create(code="PARA500", label="Paracétamol 500mg", status=Medication.STATUS_ACTIF)
-        Medication.objects.create(code="IBU200", label="Ibuprofène 200mg", status=Medication.STATUS_SUPPR)
+        Medication.objects.create(
+            code="PARA500", label="Paracétamol 500mg", status=Medication.STATUS_ACTIF
+        )
+        Medication.objects.create(
+            code="IBU200", label="Ibuprofène 200mg", status=Medication.STATUS_SUPPR
+        )
 
     def test_patient_list(self):
         url = reverse("patient-list")
