@@ -1,0 +1,47 @@
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+pythonpath = ["."]
+testpaths = ["medical/tests"]
+
+[tool.coverage.run]
+source = ["medical"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "*/management/*",
+    "medical/apps.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+exclude = [
+    "*/migrations/*",
+    "manage.py",
+    "config/asgi.py",
+    "config/wsgi.py",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8 naming
+    "UP",  # pyupgrade
+    "B",   # bugbear
+    "DJ",  # flake8-django
+]
+ignore = [
+    "B008",  # do not perform function calls in default arguments (DRF does it)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["medical", "config"]
+
+[tool.ty.environment]
+python-version = "3.10"
