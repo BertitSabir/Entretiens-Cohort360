@@ -1,6 +1,6 @@
 import django_filters
 
-from .models import Patient, Medication
+from .models import Medication, Patient, Prescription
 
 
 class PatientFilter(django_filters.FilterSet):
@@ -34,3 +34,28 @@ class MedicationFilter(django_filters.FilterSet):
     class Meta:
         model = Medication
         fields = ["code", "label", "status"]
+
+
+class PrescriptionFilter(django_filters.FilterSet):
+    patient = django_filters.NumberFilter(field_name="patient__id")
+    medicament = django_filters.NumberFilter(field_name="medication__id")
+
+    date_debut = django_filters.DateFilter(field_name="start_date", lookup_expr="exact")
+    date_debut__apres = django_filters.DateFilter(
+        field_name="start_date", lookup_expr="gte"
+    )
+    date_debut__avant = django_filters.DateFilter(
+        field_name="start_date", lookup_expr="lte"
+    )
+
+    date_fin = django_filters.DateFilter(field_name="end_date", lookup_expr="exact")
+    date_fin__apres = django_filters.DateFilter(
+        field_name="end_date", lookup_expr="gte"
+    )
+    date_fin__avant = django_filters.DateFilter(
+        field_name="end_date", lookup_expr="lte"
+    )
+
+    class Meta:
+        model = Prescription
+        fields = []
