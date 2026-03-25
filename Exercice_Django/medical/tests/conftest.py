@@ -20,8 +20,8 @@ def prescription(patient, medication):
     return Prescription(
         patient=patient,
         medication=medication,
-        start_date="2024-01-01",
-        end_date="2024-01-10",
+        start_date="2026-01-01",
+        end_date="2026-01-10",
         comment="Aucune allergie connue",
     )
 
@@ -45,6 +45,17 @@ def prescription_db(patient_db, medication_db):
     return Prescription.objects.create(
         patient=patient_db,
         medication=medication_db,
-        start_date="2024-01-01",
-        end_date="2024-01-10",
+        start_date="2026-01-01",
+        end_date="2026-01-10",
     )
+
+
+@pytest.fixture
+def prescription_data(patient_db, medication_db):
+    return {
+        "patient": patient_db.pk,
+        "medication": medication_db.pk,
+        "start_date": "2026-01-01",
+        "end_date": "2026-01-10",
+        "status": Prescription.STATUS_VALIDE,
+    }
