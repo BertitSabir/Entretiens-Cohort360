@@ -47,7 +47,7 @@ run:
 	python manage.py runserver
 
 seed:
-	python manage.py seed_demo --patients 2500 --medications 150
+	python manage.py seed_demo --patients 2500 --medications 150 --prescriptions 30
 
 pre-commit:
 	pre-commit run
