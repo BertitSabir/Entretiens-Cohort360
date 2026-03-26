@@ -29,6 +29,7 @@ class MedicationViewSet(viewsets.ReadOnlyModelViewSet):
 class PrescriptionViewSet(viewsets.ModelViewSet):
     """Création, lecture et mise à jour des prescriptions."""
 
+    http_method_names = ["get", "post", "put", "patch", "head", "options"]
     queryset = Prescription.objects.select_related("patient", "medication").order_by(
         "-created_at"
     )

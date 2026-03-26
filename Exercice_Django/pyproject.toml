@@ -9,7 +9,8 @@ omit = [
     "*/migrations/*",
     "*/tests/*",
     "*/management/*",
-    "medical/apps.py",
+    "*/apps.py",
+    "*/exceptions.py",
 ]
 
 [tool.coverage.report]
@@ -24,6 +25,7 @@ exclude = [
     "manage.py",
     "config/asgi.py",
     "config/wsgi.py",
+    "config/settings.py",
 ]
 
 [tool.ruff.lint]

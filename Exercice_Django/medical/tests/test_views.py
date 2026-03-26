@@ -191,3 +191,29 @@ def test_filter_combined(api_client, prescriptions):
     assert response.status_code == status.HTTP_200_OK
     assert all(p["patient"]["id"] == patient_id for p in response.data)
     assert all(p["status"] == Prescription.STATUS_VALIDE for p in response.data)
+
+
+@pytest.mark.django_db
+def test_create_prescription_invalid_status_returns_400(api_client, prescription_data):
+    # Arrange
+    url = "/Prescription"
+    prescription_data["status"] = "invalid_status"
+
+    # Act
+    response = api_client.post(url, prescription_data)
+
+    # Assert
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "status" in response.data
+
+
+@pytest.mark.django_db
+def test_delete_prescription_returns_405(api_client, prescription_db):
+    # Arrange
+    url = f"/Prescription/{prescription_db.id}"
+
+    # Act
+    response = api_client.delete(url)
+
+    # Assert
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
