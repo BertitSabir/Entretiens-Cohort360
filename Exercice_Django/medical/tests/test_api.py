@@ -36,14 +36,14 @@ class ApiListTests(TestCase):
         url = reverse("patient-list")
         r = self.client.get(url, {"nom": "mart"})
         self.assertEqual(r.status_code, 200)
-        data = r.json()
+        data = r.json()["results"]
         self.assertTrue(all("mart" in p["last_name"].lower() for p in data))
 
     def test_patient_filter_date(self):
         url = reverse("patient-list")
         r = self.client.get(url, {"date_naissance": "1980-05-20"})
         self.assertEqual(r.status_code, 200)
-        data = r.json()
+        data = r.json()["results"]
         self.assertTrue(all(p["birth_date"] == "1980-05-20" for p in data))
 
     def test_medication_list(self):
@@ -56,5 +56,5 @@ class ApiListTests(TestCase):
         url = reverse("medication-list")
         r = self.client.get(url, {"status": "actif"})
         self.assertEqual(r.status_code, 200)
-        data = r.json()
+        data = r.json()["results"]
         self.assertTrue(all(m["status"] == "actif" for m in data))

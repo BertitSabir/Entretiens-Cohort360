@@ -37,6 +37,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "medical.middleware.DeprecationMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -108,4 +109,9 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
     ],
     "EXCEPTION_HANDLER": "medical.exceptions.custom_exception_handler",
+    "DEFAULT_PAGINATION_CLASS": "medical.pagination.StandardPagination",
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    "DEFAULT_VERSION": "v1",
+    "ALLOWED_VERSIONS": ["v1"],
+
 }

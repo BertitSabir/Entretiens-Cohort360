@@ -14,9 +14,9 @@ def test_list_prescriptions(api_client, prescription_db):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
-    assert isinstance(response.data[0]["patient"], dict)
-    assert isinstance(response.data[0]["medication"], dict)
+    assert response.data["count"] == 1
+    assert isinstance(response.data["results"][0]["patient"], dict)
+    assert isinstance(response.data["results"][0]["medication"], dict)
 
 
 @pytest.mark.django_db
@@ -120,7 +120,7 @@ def test_filter_by_patient(api_client, prescriptions):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert all(p["patient"]["id"] == patient_id for p in response.data)
+    assert all(p["patient"]["id"] == patient_id for p in response.data["results"])
 
 
 @pytest.mark.django_db
@@ -134,7 +134,7 @@ def test_filter_by_medicament(api_client, prescriptions):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert all(p["medication"]["id"] == medication_id for p in response.data)
+    assert all(p["medication"]["id"] == medication_id for p in response.data["results"])
 
 
 @pytest.mark.django_db
@@ -147,7 +147,8 @@ def test_filter_by_status(api_client, prescriptions):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert all(p["status"] == Prescription.STATUS_VALIDE for p in response.data)
+    results = response.data["results"]
+    assert all(p["status"] == Prescription.STATUS_VALIDE for p in results)
 
 
 @pytest.mark.django_db
@@ -160,7 +161,7 @@ def test_filter_by_date_debut_apres(api_client, prescriptions):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 2
+    assert response.data["count"] == 2
 
 
 @pytest.mark.django_db
@@ -173,7 +174,7 @@ def test_filter_by_date_fin_avant(api_client, prescriptions):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 2
+    assert response.data["count"] == 2
 
 
 @pytest.mark.django_db
@@ -189,8 +190,9 @@ def test_filter_combined(api_client, prescriptions):
 
     # Assert
     assert response.status_code == status.HTTP_200_OK
-    assert all(p["patient"]["id"] == patient_id for p in response.data)
-    assert all(p["status"] == Prescription.STATUS_VALIDE for p in response.data)
+    results = response.data["results"]
+    assert all(p["patient"]["id"] == patient_id for p in results)
+    assert all(p["status"] == Prescription.STATUS_VALIDE for p in results)
 
 
 @pytest.mark.django_db
@@ -217,3 +219,24 @@ def test_delete_prescription_returns_405(api_client, prescription_db):
 
     # Assert
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+@pytest.mark.django_db
+def test_versioned_route_returns_200(api_client, prescription_db):
+    response = api_client.get("/api/v1/Prescription")
+    assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+def test_legacy_route_has_deprecation_headers(api_client, prescription_db):
+    response = api_client.get("/Prescription")
+    assert response.status_code == status.HTTP_200_OK
+    assert response["Deprecation"] == "true"
+    assert "Sunset" in response
+    assert "Link" in response
+
+
+@pytest.mark.django_db
+def test_versioned_route_has_no_deprecation_headers(api_client, prescription_db):
+    response = api_client.get("/api/v1/Prescription")
+    assert "Deprecation" not in response
