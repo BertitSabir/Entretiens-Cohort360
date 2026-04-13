@@ -1,12 +1,12 @@
 import pytest
 from rest_framework.test import APIClient
 
-from medical.models import Medication, Patient, Prescription
-from medical.tests.factories import (
+from medical.factories import (
     MedicationFactory,
     PatientFactory,
     PrescriptionFactory,
 )
+from medical.models import Medication, Patient, Prescription
 
 
 @pytest.fixture
